@@ -1,0 +1,1 @@
+Database error: SQLSTATE[HY000]: General error: 1005 Can't create table `brbms`.`messages` (errno: 150 "Foreign key constraint is incorrectly formed")Database error: SQLSTATE[HY000]: General error: 1005 Can't create table `brbms`.`messages` (errno: 150 "Foreign key constraint is incorrectly formed")

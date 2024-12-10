@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Beach</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Cropper.js CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Add New Beach Form -->
+    <div class="container my-5">
+        <h2 class="text-center mb-4">Add New Beach</h2>
+        <form action="../php/beach/add.php" method="POST" enctype="multipart/form-data">
+            <!-- Beach Name -->
+            <div class="mb-3">
+                <label for="beach_name" class="form-label">Beach Name</label>
+                <input type="text" class="form-control" id="beach_name" name="beach_name" placeholder="Enter beach name" required>
+            </div>
+
+            <!-- Description -->
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea class="form-control" id="description" name="description" rows="4" placeholder="Enter beach description" required></textarea>
+            </div>
+
+            <!-- Location -->
+            <div class="mb-3">
+                <label for="location" class="form-label">Location</label>
+                <input type="text" class="form-control" id="location" name="location" placeholder="Enter beach location" required>
+            </div>
+
+            <!-- Latitude -->
+            <div class="mb-3">
+                <label for="latitude" class="form-label">Latitude</label>
+                <input type="text" class="form-control" id="latitude" name="latitude" placeholder="Enter latitude" required>
+            </div>
+
+            <!-- Longitude -->
+            <div class="mb-3">
+                <label for="longitude" class="form-label">Longitude</label>
+                <input type="text" class="form-control" id="longitude" name="longitude" placeholder="Enter longitude" required>
+            </div>
+
+            <!-- GCash Name -->
+            <div class="mb-3">
+                <label for="gcash_name" class="form-label">GCash Name</label>
+                <input type="text" class="form-control" id="gcash_name" name="gcash_name" placeholder="Enter your GCash name" required>
+            </div>
+
+            <!-- GCash Number -->
+            <div class="mb-3">
+                <label for="gcash_number" class="form-label">GCash Number</label>
+                <input type="text" class="form-control" id="gcash_number" name="gcash_phone_number" placeholder="Enter your GCash number" required>
+            </div>
+
+            <!-- GCash QR Code -->
+            <div class="mb-3">
+                <label for="gcash_qr_code" class="form-label">GCash QR Code (optional)</label>
+                <input type="file" class="form-control" id="gcash_qr_code" name="gcash_qr_code" accept="image/*">
+                <small class="form-text text-muted">Upload your GCash QR code (optional)</small>
+            </div>
+
+            <!-- Main Image -->
+            <div class="mb-3">
+                <label for="image" class="form-label">Main Beach Image</label>
+                <input type="file" class="form-control" id="imageInput" name="image" accept="image/*" required>
+                <small class="form-text text-muted">Upload the main image of the beach</small>
+            </div>
+
+            <!-- Image Preview & Cropper -->
+            <div id="imagePreview" class="mb-3">
+                <img id="imagePreviewImg" src="#" alt="Image Preview" style="max-width: 100%; display: none;">
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center">
+                <button type="submit" name="add_beach" class="btn btn-primary">Add Beach</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Cropper.js JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+
+    <script>
+        // Initialize Cropper.js
+        let cropper;
+        
+        // Preview the image and initialize the cropper
+        document.getElementById("imageInput").addEventListener("change", function (e) {
+            let file = e.target.files[0];
+            if (file) {
+                let reader = new FileReader();
+                reader.onload = function (event) {
+                    // Display the image preview
+                    let image = document.getElementById("imagePreviewImg");
+                    image.src = event.target.result;
+                    image.style.display = "block";
+
+                    // Destroy the previous cropper instance if exists
+                    if (cropper) {
+                        cropper.destroy();
+                    }
+
+                    // Initialize the cropper
+                    cropper = new Cropper(image, {
+                        aspectRatio: 1, // 1:1 aspect ratio for square crop
+                        viewMode: 1,
+                        scalable: true,
+                        zoomable: true,
+                        movable: true,
+                        rotatable: true,
+                    });
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Automatically crop and display the result
+        document.getElementById("imageInput").addEventListener("change", function () {
+            if (cropper) {
+                // Get the cropped image data as a base64 string
+                var canvas = cropper.getCroppedCanvas();
+                canvas.toBlob(function (blob) {
+                    var url = URL.createObjectURL(blob);
+                    document.getElementById("imagePreviewImg").src = url;
+                });
+            }
+        });
+    </script>
+</body>
+</html>
